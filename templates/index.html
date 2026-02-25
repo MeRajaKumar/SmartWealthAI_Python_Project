@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="card">
+    <h2>Create Financial Plan</h2>
+
+    <form action="/predict" method="POST">
+        <input type="number" name="income" placeholder="Monthly Income" required>
+        <input type="number" name="expenses" placeholder="Monthly Expenses" required>
+
+        <select name="risk">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+
+        <input type="number" name="duration" placeholder="Investment Duration (Years)" required>
+
+        <button type="submit">Generate Plan</button>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard">
+
+<div class="card">
+    <h3>Financial Summary</h3>
+    <p>Monthly Surplus: ₹{{ result.surplus }}</p>
+    <p>Recommended Needs: ₹{{ result.recommended_needs }}</p>
+    <p>Recommended Wants: ₹{{ result.recommended_wants }}</p>
+    <p>Recommended Savings: ₹{{ result.recommended_savings }}</p>
+    <p>Emergency Fund Required (6 months): ₹{{ result.emergency_required }}</p>
+    <p>Suggested Investment: ₹{{ result.invest_amount }}</p>
+    <p>Projected Wealth (Inflation Adjusted): ₹{{ result.future_value }}</p>
+    <p>Financial Health Score: {{ result.health_score }}/100</p>
+</div>
+
+<div class="card">
+    <h3>Investment Allocation</h3>
+    <canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+    <h3>Beginner Roadmap</h3>
+    <ul>
+        {% for step in result.roadmap %}
+        <li>{{ step }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+</div>
+
+<script>
+var ctx = document.getElementById('chart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: [{% for key in result.allocation.keys() %}"{{ key }}",{% endfor %}],
+        datasets: [{
+            data: [{% for value in result.allocation.values() %}{{ value }},{% endfor %}]
+        }]
+    }
+});
+</script>
+
+{% endblock %}
