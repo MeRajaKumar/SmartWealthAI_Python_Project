@@ -3,44 +3,87 @@
 
 <div class="dashboard">
 
-<div class="card">
-    <h3>Financial Summary</h3>
-    <p>Monthly Surplus: ₹{{ result.surplus }}</p>
-    <p>Recommended Needs: ₹{{ result.recommended_needs }}</p>
-    <p>Recommended Wants: ₹{{ result.recommended_wants }}</p>
-    <p>Recommended Savings: ₹{{ result.recommended_savings }}</p>
-    <p>Emergency Fund Required (6 months): ₹{{ result.emergency_required }}</p>
-    <p>Suggested Investment: ₹{{ result.invest_amount }}</p>
-    <p>Projected Wealth (Inflation Adjusted): ₹{{ result.future_value }}</p>
-    <p>Financial Health Score: {{ result.health_score }}/100</p>
+    <!-- Summary Card -->
+    <div class="card">
+        <h2>Financial Summary</h2>
+
+        <p><strong>Monthly Surplus:</strong> ₹{{ result.surplus }}</p>
+        <p><strong>Projected Wealth (ML Predicted):</strong> ₹{{ result.future_value }}</p>
+        <p><strong>Financial Health Score:</strong> {{ result.health_score }}/100</p>
+
+        <button onclick="toggleDetails()">View Detailed Analysis</button>
+
+        <div id="details" style="display:none; margin-top:15px;">
+            <p><strong>Recommended Needs (50%):</strong> ₹{{ result.recommended_needs }}</p>
+            <p><strong>Recommended Wants (30%):</strong> ₹{{ result.recommended_wants }}</p>
+            <p><strong>Recommended Savings (20%):</strong> ₹{{ result.recommended_savings }}</p>
+            <p><strong>Emergency Fund Required (6 months):</strong> ₹{{ result.emergency_required }}</p>
+        </div>
+    </div>
+
+    <!-- Investment Allocation Chart -->
+    <div class="card">
+        <h2>Investment Allocation</h2>
+        <canvas id="allocationChart"></canvas>
+    </div>
+
+    <!-- Roadmap Section -->
+    <div class="card">
+        <h2>Beginner Investment Roadmap</h2>
+        <ul>
+            {% for step in result.roadmap %}
+            <li>{{ step }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="card chart-card">
+    <h2>Investment Allocation</h2>
+    <div class="chart-container">
+        <canvas id="allocationChart"></canvas>
+    </div>
+</div>
 </div>
 
-<div class="card">
-    <h3>Investment Allocation</h3>
-    <canvas id="chart"></canvas>
 </div>
 
-<div class="card">
-    <h3>Beginner Roadmap</h3>
-    <ul>
-        {% for step in result.roadmap %}
-        <li>{{ step }}</li>
-        {% endfor %}
-    </ul>
-</div>
-
-</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-var ctx = document.getElementById('chart').getContext('2d');
+function toggleDetails() {
+    var x = document.getElementById("details");
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+
+// Chart.js Investment Allocation
+var ctx = document.getElementById('allocationChart').getContext('2d');
 
 new Chart(ctx, {
     type: 'doughnut',
     data: {
         labels: [{% for key in result.allocation.keys() %}"{{ key }}",{% endfor %}],
         datasets: [{
-            data: [{% for value in result.allocation.values() %}{{ value }},{% endfor %}]
+            data: [{% for value in result.allocation.values() %}{{ value }},{% endfor %}],
+            backgroundColor: [
+                "#4CAF50",
+                "#2196F3",
+                "#FFC107",
+                "#FF5722",
+                "#9C27B0"
+            ]
         }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            }
+        }
     }
 });
 </script>

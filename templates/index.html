@@ -1,23 +1,128 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="card">
-    <h2>Create Financial Plan</h2>
+<!-- HERO SECTION -->
+<section class="hero">
 
-    <form action="/predict" method="POST">
+    <div class="hero-content">
+        <h1>SmartWealth AI – Your Intelligent Salary Planning Partner</h1>
+
+        <p class="subtitle">
+            Plan. Invest. Grow. Achieve Your Goals.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#planner" class="btn primary">Create My Financial Plan</a>
+            <a href="#features" class="btn secondary">Explore Features</a>
+            <a href="#how" class="btn outline">See How It Works</a>
+        </div>
+
+        <div class="hero-points">
+            <div>✔ Designed for Salaried Individuals</div>
+            <div>✔ 5–10 Year Wealth Planning</div>
+            <div>✔ AI-Driven Financial Insights</div>
+            <div>✔ Goal-Based Investment Roadmap</div>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- FEATURES SECTION -->
+<section id="features" class="features">
+
+    <h2 class="section-title">Core Features of SmartWealth AI</h2>
+
+    <div class="features-grid">
+
+        <!-- Card 1 -->
+        <div class="feature-card">
+            <h3>Income & Expense Analyzer</h3>
+            <ul>
+                <li>Tracks spending habits</li>
+                <li>Detects overspending</li>
+                <li>Suggests optimized budgeting</li>
+            </ul>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="feature-card">
+            <h3>Smart Investment Allocation</h3>
+            <ul>
+                <li>Applies 50-30-20 rule</li>
+                <li>Adjusts for income level</li>
+                <li>Risk-based diversification</li>
+            </ul>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="feature-card">
+            <h3>Goal-Based Planning</h3>
+            <ul>
+                <li>House planning</li>
+                <li>Retirement strategy</li>
+                <li>Child education fund</li>
+                <li>Custom financial goals</li>
+            </ul>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="feature-card">
+            <h3>Future Wealth Projection</h3>
+            <ul>
+                <li>5–10 year simulation</li>
+                <li>Inflation-adjusted returns</li>
+                <li>Visual growth graph</li>
+            </ul>
+        </div>
+
+    </div>
+
+</section>
+
+<!-- USER PROFILE SETUP SECTION -->
+<section id="planner" class="planner">
+
+    <h2 class="section-title">Create Your Financial Profile</h2>
+
+    <form action="/predict" method="POST" class="planner-form">
+
+        <h3>Basic Information</h3>
+
         <input type="number" name="income" placeholder="Monthly Income" required>
-        <input type="number" name="expenses" placeholder="Monthly Expenses" required>
+        <input type="number" name="savings" placeholder="Current Savings" required>
+        <input type="number" name="age" placeholder="Your Age" required>
+        <input type="number" name="dependents" placeholder="Number of Dependents" required>
 
-        <select name="risk">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
+        <select name="risk" required>
+            <option value="" disabled selected>Select Risk Appetite</option>
+            <option value="Low">Low Risk</option>
+            <option value="Medium">Medium Risk</option>
+            <option value="High">High Risk</option>
         </select>
 
-        <input type="number" name="duration" placeholder="Investment Duration (Years)" required>
+        <input type="number" name="existing_investments" placeholder="Existing Investment Amount" required>
 
-        <button type="submit">Generate Plan</button>
+        <h3>Monthly Expense Breakdown</h3>
+
+        <input type="number" name="rent" placeholder="Rent / Housing">
+        <input type="number" name="utilities" placeholder="Utilities">
+        <input type="number" name="food" placeholder="Food">
+        <input type="number" name="transport" placeholder="Transportation">
+        <input type="number" name="emi" placeholder="EMI">
+        <input type="number" name="entertainment" placeholder="Entertainment">
+        <input type="number" name="misc" placeholder="Miscellaneous">
+
+        <h3>Primary Financial Goal</h3>
+
+        <input type="text" name="goal_name" placeholder="Goal Name (e.g., House)">
+        <input type="number" name="goal_amount" placeholder="Goal Amount">
+        <input type="number" name="goal_years" placeholder="Goal Timeline (Years)">
+
+        <button type="submit">Generate Complete Financial Plan</button>
+
     </form>
-</div>
+
+</section>
 
 {% endblock %}
