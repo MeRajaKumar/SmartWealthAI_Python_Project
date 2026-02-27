@@ -17,12 +17,18 @@
     <div class="logo">SmartWealth AI</div>
     <div class="nav-links">
         <a href="/">Home</a>
-        <a href="#features">Features</a>
-        <a href="#how">How It Works</a>
+        {% if request.path == "/" %}
+        <button type="button" data-open-modal="featuresModal">Features</button>
+        <button type="button" data-open-modal="howModal">How It Works</button>
+        {% else %}
+        <a href="/">Start Planning</a>
+        {% endif %}
     </div>
 </nav>
 
 {% block content %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
 </body>
 </html>

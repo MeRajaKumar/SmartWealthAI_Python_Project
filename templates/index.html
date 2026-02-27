@@ -5,124 +5,194 @@
 <section class="hero">
 
     <div class="hero-content">
-        <h1>SmartWealth AI – Your Intelligent Salary Planning Partner</h1>
+        <h1>
+            <span class="hero-title-main">SmartWealth AI</span><br>
+            <span class="hero-title-sub">Your Intelligent Salary Planning Partner</span>
+        </h1>
 
         <p class="subtitle">
             Plan. Invest. Grow. Achieve Your Goals.
         </p>
 
         <div class="hero-buttons">
-            <a href="#planner" class="btn primary">Create My Financial Plan</a>
-            <a href="#features" class="btn secondary">Explore Features</a>
-            <a href="#how" class="btn outline">See How It Works</a>
+            <button type="button" data-open-modal="plannerModal" class="btn primary">Create My Financial Plan</button>
+            <button type="button" data-open-modal="featuresModal" class="btn secondary">Explore Features</button>
+            <button type="button" data-open-modal="howModal" class="btn outline">See How It Works</button>
         </div>
 
         <div class="hero-points">
-            <div>✔ Designed for Salaried Individuals</div>
-            <div>✔ 5–10 Year Wealth Planning</div>
-            <div>✔ AI-Driven Financial Insights</div>
-            <div>✔ Goal-Based Investment Roadmap</div>
+            <div><span class="point-check">&#10003;</span>Designed for Salaried Individuals</div>
+            <div><span class="point-check">&#10003;</span>5-10 Year Wealth Planning</div>
+            <div><span class="point-check">&#10003;</span>AI-Driven Financial Insights</div>
+            <div><span class="point-check">&#10003;</span>Goal-Based Investment Roadmap</div>
         </div>
     </div>
 
 </section>
 
+<!-- PLANNER POPUP -->
+<div id="plannerModal" class="site-modal" aria-hidden="true">
+    <div class="site-modal-panel" role="dialog" aria-modal="true" aria-labelledby="plannerTitle">
+        <button type="button" class="modal-close" data-close-modal aria-label="Close planner">x</button>
 
-<!-- FEATURES SECTION -->
-<section id="features" class="features">
+        <section id="planner" class="planner popup-scroll planner-popup">
 
-    <h2 class="section-title">Core Features of SmartWealth AI</h2>
+            <h2 id="plannerTitle" class="section-title">Create Your Financial Profile</h2>
 
-    <div class="features-grid">
+            <form action="/predict" method="POST" class="planner-form">
 
-        <!-- Card 1 -->
-        <div class="feature-card">
-            <h3>Income & Expense Analyzer</h3>
-            <ul>
-                <li>Tracks spending habits</li>
-                <li>Detects overspending</li>
-                <li>Suggests optimized budgeting</li>
-            </ul>
-        </div>
+                <h3>Basic Information</h3>
 
-        <!-- Card 2 -->
-        <div class="feature-card">
-            <h3>Smart Investment Allocation</h3>
-            <ul>
-                <li>Applies 50-30-20 rule</li>
-                <li>Adjusts for income level</li>
-                <li>Risk-based diversification</li>
-            </ul>
-        </div>
+                <input type="number" name="income" placeholder="Monthly Income" required>
+                <input type="number" name="savings" placeholder="Current Savings" required>
+                <input type="number" name="age" placeholder="Your Age" required>
+                <input type="number" name="dependents" placeholder="Number of Dependents" required>
 
-        <!-- Card 3 -->
-        <div class="feature-card">
-            <h3>Goal-Based Planning</h3>
-            <ul>
-                <li>House planning</li>
-                <li>Retirement strategy</li>
-                <li>Child education fund</li>
-                <li>Custom financial goals</li>
-            </ul>
-        </div>
+                <select name="risk" required>
+                    <option value="" disabled selected>Select Risk Appetite</option>
+                    <option value="Low">Low Risk</option>
+                    <option value="Medium">Medium Risk</option>
+                    <option value="High">High Risk</option>
+                </select>
 
-        <!-- Card 4 -->
-        <div class="feature-card">
-            <h3>Future Wealth Projection</h3>
-            <ul>
-                <li>5–10 year simulation</li>
-                <li>Inflation-adjusted returns</li>
-                <li>Visual growth graph</li>
-            </ul>
-        </div>
+                <input type="number" name="existing_investments" placeholder="Existing Investment Amount" required>
 
+                <h3>Monthly Expense Breakdown</h3>
+
+                <input type="number" name="rent" placeholder="Rent / Housing">
+                <input type="number" name="utilities" placeholder="Utilities">
+                <input type="number" name="food" placeholder="Food">
+                <input type="number" name="transport" placeholder="Transportation">
+                <input type="number" name="emi" placeholder="EMI">
+                <input type="number" name="entertainment" placeholder="Entertainment">
+                <input type="number" name="misc" placeholder="Miscellaneous">
+
+                <h3>Primary Financial Goal</h3>
+
+                <input type="text" name="goal_name" placeholder="Goal Name (e.g., House)">
+                <input type="number" name="goal_amount" placeholder="Goal Amount">
+                <input type="number" name="goal_years" placeholder="Goal Timeline (Years)">
+
+                <button type="submit">Generate Complete Financial Plan</button>
+
+            </form>
+
+        </section>
     </div>
+</div>
 
-</section>
+<!-- FEATURES POPUP -->
+<div id="featuresModal" class="site-modal" aria-hidden="true">
+    <div class="site-modal-panel" role="dialog" aria-modal="true" aria-labelledby="featuresTitle">
+        <button type="button" class="modal-close" data-close-modal aria-label="Close features">x</button>
 
-<!-- USER PROFILE SETUP SECTION -->
-<section id="planner" class="planner">
+        <section id="features" class="features popup-scroll features-popup">
+            <h2 id="featuresTitle" class="section-title">Core Features of SmartWealth AI</h2>
 
-    <h2 class="section-title">Create Your Financial Profile</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <h3>Income & Expense Analyzer</h3>
+                    <ul>
+                        <li>Tracks spending habits</li>
+                        <li>Detects overspending</li>
+                        <li>Suggests optimized budgeting</li>
+                    </ul>
+                </div>
 
-    <form action="/predict" method="POST" class="planner-form">
+                <div class="feature-card">
+                    <h3>Smart Investment Allocation</h3>
+                    <ul>
+                        <li>Applies 50-30-20 rule</li>
+                        <li>Adjusts for income level</li>
+                        <li>Risk-based diversification</li>
+                    </ul>
+                </div>
 
-        <h3>Basic Information</h3>
+                <div class="feature-card">
+                    <h3>Goal-Based Planning</h3>
+                    <ul>
+                        <li>House planning</li>
+                        <li>Retirement strategy</li>
+                        <li>Child education fund</li>
+                        <li>Custom financial goals</li>
+                    </ul>
+                </div>
 
-        <input type="number" name="income" placeholder="Monthly Income" required>
-        <input type="number" name="savings" placeholder="Current Savings" required>
-        <input type="number" name="age" placeholder="Your Age" required>
-        <input type="number" name="dependents" placeholder="Number of Dependents" required>
+                <div class="feature-card">
+                    <h3>Future Wealth Projection</h3>
+                    <ul>
+                        <li>5-10 year simulation</li>
+                        <li>Inflation-adjusted returns</li>
+                        <li>Visual growth graph</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+</div>
 
-        <select name="risk" required>
-            <option value="" disabled selected>Select Risk Appetite</option>
-            <option value="Low">Low Risk</option>
-            <option value="Medium">Medium Risk</option>
-            <option value="High">High Risk</option>
-        </select>
+<!-- HOW IT WORKS POPUP -->
+<div id="howModal" class="site-modal" aria-hidden="true">
+    <div class="site-modal-panel" role="dialog" aria-modal="true" aria-labelledby="howTitle">
+        <button type="button" class="modal-close" data-close-modal aria-label="Close how it works">x</button>
 
-        <input type="number" name="existing_investments" placeholder="Existing Investment Amount" required>
+        <section id="how" class="how-it-works popup-scroll how-popup">
+            <h2 id="howTitle" class="section-title">See How SmartWealth AI Works</h2>
+            <p class="how-subtitle">SmartWealth AI combines budgeting logic + ML projection to turn your salary data into an action-ready investment plan.</p>
 
-        <h3>Monthly Expense Breakdown</h3>
+            <div class="how-grid">
+                <div class="how-card">
+                    <span class="how-step">Step 1</span>
+                    <h3>Add Your Financial Details</h3>
+                    <p>Enter income, savings, age, dependents, existing investments, and risk appetite to build your profile.</p>
+                </div>
 
-        <input type="number" name="rent" placeholder="Rent / Housing">
-        <input type="number" name="utilities" placeholder="Utilities">
-        <input type="number" name="food" placeholder="Food">
-        <input type="number" name="transport" placeholder="Transportation">
-        <input type="number" name="emi" placeholder="EMI">
-        <input type="number" name="entertainment" placeholder="Entertainment">
-        <input type="number" name="misc" placeholder="Miscellaneous">
+                <div class="how-card">
+                    <span class="how-step">Step 2</span>
+                    <h3>Share Monthly Expenses</h3>
+                    <p>Provide essential + lifestyle expenses (rent, utilities, food, transport, EMI, entertainment, misc).</p>
+                </div>
 
-        <h3>Primary Financial Goal</h3>
+                <div class="how-card">
+                    <span class="how-step">Step 3</span>
+                    <h3>AI Analysis Engine</h3>
+                    <p>System computes surplus, checks 50-30-20 balance, calculates emergency buffer, and predicts future value.</p>
+                </div>
 
-        <input type="text" name="goal_name" placeholder="Goal Name (e.g., House)">
-        <input type="number" name="goal_amount" placeholder="Goal Amount">
-        <input type="number" name="goal_years" placeholder="Goal Timeline (Years)">
+                <div class="how-card">
+                    <span class="how-step">Step 4</span>
+                    <h3>Goal and Action Plan</h3>
+                    <p>Set timeline + target amount and receive allocation strategy, roadmap, health score, and goal progress.</p>
+                </div>
+            </div>
 
-        <button type="submit">Generate Complete Financial Plan</button>
+            <div class="how-insights-grid">
+                <div class="how-insight-card">
+                    <h3>What SmartWealth AI Analyzes</h3>
+                    <ul>
+                        <li>Income-to-expense efficiency and monthly surplus</li>
+                        <li>Needs, wants, savings split against healthy ratios</li>
+                        <li>Risk appetite to match suitable allocation style</li>
+                        <li>Goal timeline pressure and future wealth forecast</li>
+                    </ul>
+                </div>
 
-    </form>
+                <div class="how-insight-card">
+                    <h3>What You Get On Prediction Page</h3>
+                    <ul>
+                        <li>Financial health score with warning signals</li>
+                        <li>Investment allocation chart and category percentages</li>
+                        <li>Step-by-step beginner roadmap for execution</li>
+                        <li>Goal gap tracker with progress visibility</li>
+                    </ul>
+                </div>
+            </div>
 
-</section>
+            <div class="how-bottom-note">
+                <p><strong>Best practice:</strong> Update your data every month to keep the plan realistic as income, expenses, and goals change.</p>
+            </div>
+        </section>
+    </div>
+</div>
 
 {% endblock %}

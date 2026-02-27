@@ -46,16 +46,28 @@ def predict():
     if needs_percent > 60:
         warning = "Warning: Your essential expenses exceed 60% of income."
 
+    goal_gap = None
+    goal_progress = None
+    if goal_amount > 0:
+        goal_gap = round(goal_amount - result["future_value"], 2)
+        goal_progress = round(min((result["future_value"] / goal_amount) * 100, 100), 2)
+
     return render_template(
         "result.html",
         result=result,
+        income=income,
+        total_expenses=round(total_expenses, 2),
+        needs_amount=round(needs, 2),
+        wants_amount=round(wants, 2),
         needs_percent=round(needs_percent, 2),
         wants_percent=round(wants_percent, 2),
         savings_percent=round(savings_percent, 2),
         warning=warning,
         goal_name=goal_name,
         goal_amount=goal_amount,
-        goal_years=goal_years
+        goal_years=goal_years,
+        goal_gap=goal_gap,
+        goal_progress=goal_progress
     )
 
 if __name__ == "__main__":

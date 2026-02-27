@@ -1,89 +1,160 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="dashboard">
-
-    <!-- Summary Card -->
-    <div class="card">
-        <h2>Financial Summary</h2>
-
-        <p><strong>Monthly Surplus:</strong> ₹{{ result.surplus }}</p>
-        <p><strong>Projected Wealth (ML Predicted):</strong> ₹{{ result.future_value }}</p>
-        <p><strong>Financial Health Score:</strong> {{ result.health_score }}/100</p>
-
-        <button onclick="toggleDetails()">View Detailed Analysis</button>
-
-        <div id="details" style="display:none; margin-top:15px;">
-            <p><strong>Recommended Needs (50%):</strong> ₹{{ result.recommended_needs }}</p>
-            <p><strong>Recommended Wants (30%):</strong> ₹{{ result.recommended_wants }}</p>
-            <p><strong>Recommended Savings (20%):</strong> ₹{{ result.recommended_savings }}</p>
-            <p><strong>Emergency Fund Required (6 months):</strong> ₹{{ result.emergency_required }}</p>
+<div class="result-shell">
+    <section class="result-container">
+        <div class="result-header">
+            <div>
+                <p class="eyebrow">SmartWealth AI Analysis</p>
+                <h1>Your Financial Prediction Dashboard</h1>
+                <p class="result-subtitle">Personalized projection based on your income, expenses, risk profile, and goal timeline.</p>
+            </div>
+            <div class="health-badge">
+                <p>Financial Health Score</p>
+                <h2>{{ result.health_score }}/100</h2>
+                {% if result.health_score >= 75 %}
+                <span class="health-tag good">Strong</span>
+                {% elif result.health_score >= 50 %}
+                <span class="health-tag avg">Improving</span>
+                {% else %}
+                <span class="health-tag risk">At Risk</span>
+                {% endif %}
+            </div>
         </div>
-    </div>
 
-    <!-- Investment Allocation Chart -->
-    <div class="card">
-        <h2>Investment Allocation</h2>
-        <canvas id="allocationChart"></canvas>
-    </div>
+        {% if warning %}
+        <div class="insight-alert">{{ warning }}</div>
+        {% endif %}
 
-    <!-- Roadmap Section -->
-    <div class="card">
-        <h2>Beginner Investment Roadmap</h2>
-        <ul>
-            {% for step in result.roadmap %}
-            <li>{{ step }}</li>
-            {% endfor %}
-        </ul>
-    </div>
+        <div class="metrics-grid">
+            <article class="metric-card">
+                <p>Monthly Income</p>
+                <h3>Rs {{ "{:,}".format(income|round|int) }}</h3>
+            </article>
+            <article class="metric-card">
+                <p>Monthly Expenses</p>
+                <h3>Rs {{ "{:,}".format(total_expenses|round|int) }}</h3>
+            </article>
+            <article class="metric-card">
+                <p>Monthly Surplus</p>
+                <h3>Rs {{ "{:,}".format(result.surplus|round|int) }}</h3>
+            </article>
+            <article class="metric-card highlight">
+                <p>Projected Wealth</p>
+                <h3>Rs {{ "{:,}".format(result.future_value|round|int) }}</h3>
+                <small>ML predicted value</small>
+            </article>
+        </div>
 
-    <div class="card chart-card">
-    <h2>Investment Allocation</h2>
-    <div class="chart-container">
-        <canvas id="allocationChart"></canvas>
-    </div>
-</div>
-</div>
+        <div class="result-grid">
+            <article class="result-card budget-card">
+                <h2>Budget Split Analysis</h2>
+                <p class="card-subtitle">Actual distribution compared to your income.</p>
 
+                <div class="budget-row">
+                    <div class="budget-label">
+                        <span>Needs</span>
+                        <strong>{{ needs_percent }}%</strong>
+                    </div>
+                    <div class="budget-bar"><span style="width: {{ 0 if needs_percent < 0 else (100 if needs_percent > 100 else needs_percent) }}%;"></span></div>
+                </div>
+                <div class="budget-row">
+                    <div class="budget-label">
+                        <span>Wants</span>
+                        <strong>{{ wants_percent }}%</strong>
+                    </div>
+                    <div class="budget-bar wants"><span style="width: {{ 0 if wants_percent < 0 else (100 if wants_percent > 100 else wants_percent) }}%;"></span></div>
+                </div>
+                <div class="budget-row">
+                    <div class="budget-label">
+                        <span>Savings</span>
+                        <strong>{{ savings_percent }}%</strong>
+                    </div>
+                    <div class="budget-bar savings"><span style="width: {{ 0 if savings_percent < 0 else (100 if savings_percent > 100 else savings_percent) }}%;"></span></div>
+                </div>
+
+                <div class="split-summary">
+                    <p><strong>Recommended Needs (50%):</strong> Rs {{ "{:,}".format(result.recommended_needs|round|int) }}</p>
+                    <p><strong>Recommended Wants (30%):</strong> Rs {{ "{:,}".format(result.recommended_wants|round|int) }}</p>
+                    <p><strong>Recommended Savings (20%):</strong> Rs {{ "{:,}".format(result.recommended_savings|round|int) }}</p>
+                    <p><strong>Emergency Fund (6 months):</strong> Rs {{ "{:,}".format(result.emergency_required|round|int) }}</p>
+                </div>
+            </article>
+
+            <article class="result-card chart-card-v2">
+                <h2>Investment Allocation</h2>
+                <p class="card-subtitle">Suggested split based on your selected risk appetite.</p>
+                <div class="chart-wrap">
+                    <canvas id="allocationChart"></canvas>
+                </div>
+                <ul class="allocation-legend">
+                    {% for key, value in result.allocation.items() %}
+                    <li>
+                        <span>{{ key }}</span>
+                        <strong>{{ value }}%</strong>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </article>
+
+            <article class="result-card">
+                <h2>Beginner Investment Roadmap</h2>
+                <p class="card-subtitle">Step-by-step actions for the next 12 months.</p>
+                <ol class="roadmap-list">
+                    {% for step in result.roadmap %}
+                    <li>{{ step }}</li>
+                    {% endfor %}
+                </ol>
+            </article>
+
+            <article class="result-card goal-card">
+                <h2>Goal Tracker</h2>
+                {% if goal_name and goal_amount > 0 %}
+                <p class="card-subtitle">Goal: {{ goal_name }} in {{ goal_years }} year(s).</p>
+                <div class="goal-stat-row">
+                    <p><strong>Target Amount:</strong> Rs {{ "{:,}".format(goal_amount|round|int) }}</p>
+                    <p><strong>Projected Value:</strong> Rs {{ "{:,}".format(result.future_value|round|int) }}</p>
+                </div>
+                <div class="budget-bar savings"><span style="width: {{ goal_progress }}%;"></span></div>
+                <p class="goal-progress-text">Goal Progress: {{ goal_progress }}%</p>
+                {% if goal_gap > 0 %}
+                <p class="goal-gap warn">Gap Remaining: Rs {{ "{:,}".format(goal_gap|round|int) }}</p>
+                {% else %}
+                <p class="goal-gap good">Projected to meet or exceed goal.</p>
+                {% endif %}
+                {% else %}
+                <p class="card-subtitle">No specific goal entered. Add a goal in planner to get target tracking insights.</p>
+                {% endif %}
+                <a href="/" class="btn primary">Create Another Plan</a>
+            </article>
+        </div>
+    </section>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
-function toggleDetails() {
-    var x = document.getElementById("details");
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-
-// Chart.js Investment Allocation
-var ctx = document.getElementById('allocationChart').getContext('2d');
+var ctx = document.getElementById("allocationChart").getContext("2d");
 
 new Chart(ctx, {
-    type: 'doughnut',
+    type: "doughnut",
     data: {
         labels: [{% for key in result.allocation.keys() %}"{{ key }}",{% endfor %}],
         datasets: [{
             data: [{% for value in result.allocation.values() %}{{ value }},{% endfor %}],
-            backgroundColor: [
-                "#4CAF50",
-                "#2196F3",
-                "#FFC107",
-                "#FF5722",
-                "#9C27B0"
-            ]
+            backgroundColor: ["#38bdf8", "#22c55e", "#f59e0b", "#8b5cf6", "#ef4444"],
+            borderColor: "#0f172a",
+            borderWidth: 2
         }]
     },
     options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
             legend: {
-                position: 'bottom'
+                display: false
             }
-        }
+        },
+        cutout: "58%"
     }
 });
 </script>
